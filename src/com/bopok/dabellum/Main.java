@@ -1,11 +1,8 @@
 package com.bopok.dabellum;
 
-
 import com.bopok.dabellum.input.Input;
-import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -20,19 +17,21 @@ public class Main implements Runnable {
     private Thread thread;
     private boolean running = false;
 
-    private long window;
+    public long window;
 
     public void start() {
         running = true;
-        thread = new Thread(this, "Game");
+        thread = new Thread(this, "Display");
         thread.start();
     }
 
     public void init() {
+
         if (!glfwInit()) {
             throw new IllegalStateException("Unable to initialize GLFW");
 
         }
+
 
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
@@ -90,7 +89,6 @@ public class Main implements Runnable {
 
     public static void main(String[] args) {
 
-        System.out.println("hello");
         new Main().start();
 
     }
