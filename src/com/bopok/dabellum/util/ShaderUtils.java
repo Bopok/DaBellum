@@ -4,7 +4,7 @@ import static org.lwjgl.opengl.GL20.*;
 
 public class ShaderUtils {
 
-    private ShaderUtils{
+    private ShaderUtils(){
     }
 
     public static int load(String vertPath, String fragPath) {
