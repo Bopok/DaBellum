@@ -55,6 +55,7 @@ public class Main implements Runnable {
 
         GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         glfwSetWindowPos(window, (vidMode.width() - width) /2, (vidMode.height() - height) / 2);
+        glfwSetKeyCallback(window, new Input());
         glfwMakeContextCurrent(window);
         glfwShowWindow(window);
 
@@ -65,9 +66,12 @@ public class Main implements Runnable {
 
         Shader.loadAll();
 
-        Matrix4f pr_matrix = Matrix4f.orthographic(-10.0f, 10.0f, -10.0f * 9.0f / 16.0f, 10.0f * 9.0f / 16.0f, -1.0f, 1.0f);
+        Matrix4f pr_matrix = Matrix4f.orthographic(-640.0f, 640.0f, -640.0f * 9.0f / 16.0f, 640.0f * 9.0f / 16.0f, -1.0f, 1.0f);
         Shader.BASIC.setUniformMat4f("pr_matrix", pr_matrix);
         Shader.BASIC.setUniform1i("tex", 1);
+
+        Shader.HINF.setUniformMat4f("pr_matrix", pr_matrix);
+        Shader.HINF.setUniform1i("tex", 1);
 
         field = new Field();
 
@@ -75,9 +79,29 @@ public class Main implements Runnable {
 
     public void run() {
         init();
+
+        long lastTime = System.nanoTime();
+        double delta = 0.0;
+        double ns = 1000000000.0 / 60.0;
+        long timer = System.currentTimeMillis();
+        int updates = 0;
+        int frames = 0;
         while(running) {
+            long now = System.nanoTime();
+            delta += (now - lastTime) / ns;
+            if (delta >= 1.0) {
+                update();
+                updates++;
+                delta--;
+            }
             render();
-            update();
+            frames++;
+            if (System.currentTimeMillis() - timer > 1000) {
+                timer += 1000;
+                System.out.println(updates + " ups, " + frames + " fps");
+                updates = 0;
+                frames = 0;
+            }
         }
         glfwDestroyWindow(window);
         glfwTerminate();
@@ -87,9 +111,7 @@ public class Main implements Runnable {
     private void update() {
 
         glfwPollEvents();
-        if (Input.keys[GLFW_KEY_SPACE]) {
-            System.out.println("works");
-        }
+        field.update();
     }
 
     private void render() {

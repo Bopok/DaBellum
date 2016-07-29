@@ -20,6 +20,7 @@ public class Shader {
 
 
     public static Shader BASIC;
+    public static Shader HINF;
 
     private boolean enabled = false;
 
@@ -30,6 +31,7 @@ public class Shader {
 
     public static void loadAll() {
         BASIC = new Shader("shaders/shader.vert", "shaders/shader.frag");
+        HINF = new Shader("shaders/hinf.vert", "shaders/hinf.frag");
     }
 
     public int getUniform(String name) {

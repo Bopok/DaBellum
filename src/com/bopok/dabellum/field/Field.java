@@ -9,12 +9,14 @@ public class Field {
     private VertexArray field;
     private Texture fieldTex;
 
+    private Hinf hinf;
+
     public Field () {
         float[] vertices = new float[] {
-                -10.0f, -10.0f, 0.0f,
-                -10.0f,  10.0f, 0.0f,
-                 10.0f,  10.0f, 0.0f,
-                 10.0f, -10.0f, 0.0f
+                -640.0f, -360.0f, 0.0f,
+                -640.0f,  360.0f, 0.0f,
+                 640.0f,  360.0f, 0.0f,
+                 640.0f, -360.0f, 0.0f
         };
 
         byte[] indices = new byte[] {
@@ -31,6 +33,12 @@ public class Field {
 
         field = new VertexArray(vertices, indices, tcs);
         fieldTex = new Texture("res/field.png");
+
+        hinf  = new Hinf();
+    }
+
+    public void update() {
+        hinf.update();
     }
 
     public void render() {
@@ -39,6 +47,8 @@ public class Field {
         field.render();
         Shader.BASIC.disable();
         fieldTex.unbind();
+
+        hinf.render();
     }
 
 }
